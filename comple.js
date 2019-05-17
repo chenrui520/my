@@ -103,6 +103,15 @@ class Compile{
         node.textContent = value
     }
 
+    html(node,vm,exp){
+        this.update(node,vm,exp,'html')
+    }
+
+    htmlUpdater(node,value){
+        node.innerHTML = value
+    }
+
+    // 时间处理气
     eventHandler(node,vm,exp,dir){
         let fn = vm.$options.methods &&vm.$options.methods[exp];
         if(dir&&fn){
