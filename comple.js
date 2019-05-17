@@ -35,7 +35,21 @@ class Compile{
             //类型判断
             if(this.isElement(node)){
                 //元素
-                console.log('编译'+node.nodeName)
+                // console.log('编译'+node.nodeName)
+                const nodeAttrs = node.attributes;
+                Array.from(nodeAttrs).forEach(attr =>{
+                    const attrName = attr.name;
+                    const exp = attr.value;
+                    if(this.isDirective(attrName)){
+                        const dir = attrName.substring(2);
+                        //执行指令
+                        this[dir] && this[dir](node,this.$vm,exp)
+                    }
+                    if(this.isEvent(attrName)){
+                        const dir = attrName.substring(1);
+                        this.eventHandler(node,this.$vm,exp,dir)
+                    }
+                })
             }else if(this.isInterpolation(node)){
 
                 this.compileText(node)
@@ -67,8 +81,41 @@ class Compile{
         })
     }
 
+    text(node,vm,exp){
+        this.update(node,vm,exp,'text')
+    }
+
+    // 双向绑定
+    model(node,vm,exp){
+        // 指定input 的value属性
+        this.update(node,vm,exp,'model');
+        // 视图对模型相应
+        node.addEventListener('input',e=>{
+            vm[exp] = e.target.value
+        })
+    }
+
+    modelUpdater(node,value){
+        node.value = value
+    }
+
     textUpdater(node,value){
         node.textContent = value
+    }
+
+    eventHandler(node,vm,exp,dir){
+        let fn = vm.$options.methods &&vm.$options.methods[exp];
+        if(dir&&fn){
+            node.addEventListener(dir,fn.bind(vm))
+        }
+
+    }
+
+    isDirective(attr){
+        return attr.indexOf('c-') ==0;
+    }
+    isEvent(attr){
+        return attr.indexOf('@') == 0;
     }
 
     isElement(node){
