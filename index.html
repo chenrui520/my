@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+       
+    <div  id="app">
+        <p>{{name}}</p>
+        <p c-text='name'></p>
+        <p>{{age}}</p>
+        <input type="text" c-model = 'name'>
+        <button @click = 'changeName'>点一下</button>
+        <div c-html='html'></div>
+    </div>
+    <script src="comple.js"></script>
+    <script src="Cat.js"></script>
+    <script>
+       const app = new Cat({
+           el: "#app",
+           data:{
+               name:'i am test',
+               age:12,
+               html:"<button>按钮</button>"
+           },
+           created(){
+               console.log('开始')
+               setTimeout(()=>{
+                   this.name = '测试'
+               },1500)
+           },
+           methods:{
+            changeName(){
+                this.name ='开始了'
+                this.age ='开始了'
+            }
+           }
+       })
+     
+</script>
+</body>
+</html>
