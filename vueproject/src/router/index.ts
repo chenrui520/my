@@ -19,7 +19,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/',
+    path: '/login',
     name: 'login',
     component: Login
   }
@@ -35,11 +35,11 @@ router.beforeEach((to, from, next) => {
   if (isLogin) {
     next()
   } else {
-    console.log('login')
-    if (to.fullPath === '/Login') {
+    // console.log('login')
+    if (to.fullPath === '/login') {
       next()
     } else {
-      next({ path: '/Login' })
+      next({ path: '/login' })
     };
   }
 })
